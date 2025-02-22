@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "userInterfaceStyle": "automatic",
+    "orientation": "default",
+    "platforms": [
+      "web"
+    ],
+    "web": {
+      "output": "server",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "name": "LABAI",
+    "slug": "LABAI"
+  }
+}
