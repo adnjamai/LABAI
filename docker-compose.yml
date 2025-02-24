@@ -1,7 +1,6 @@
-version: "3.8"
 services:
   backend:
-    build: ./backend
+    build: ./src/backend
     ports:
       - "8000:8000"
     depends_on:
@@ -10,16 +9,16 @@ services:
       - efficientnet
 
   yolo:
-    build: ./yolo
+    build: ./src/yolo
     ports:
       - "8001:8001"
 
   unet:
-    build: ./unet
+    build: ./src/unet
     ports:
       - "8002:8002"
 
   efficientnet:
-    build: ./efficientnet
+    build: ./src/efficientnet
     ports:
       - "8003:8003"
