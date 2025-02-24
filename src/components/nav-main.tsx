@@ -17,7 +17,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-
+import { useRouter } from "expo-router";
 export function NavMain({
   items,
 }: {
@@ -32,6 +32,7 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const router = useRouter();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -42,6 +43,9 @@ export function NavMain({
             asChild
             defaultOpen={item.isActive}
             className="group/collapsible"
+            onClick={() => {
+              router.push(item.url);
+            }}
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>

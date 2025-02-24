@@ -12,6 +12,7 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  UserPlus,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -35,87 +36,46 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "LabAi",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
+
+
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Medecins",
+      url: "medecins",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Ajouter un médecin",
+          url: "medecins/add",
+          icon: UserPlus,
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
+      title: "Analyses",
+      url: "/analyses",
       icon: Bot,
       items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
+        
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
+      title: "Rapports",
+      url: "/rapports",
       icon: BookOpen,
       items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
+        
       ],
     },
     {
-      title: "Settings",
-      url: "#",
+      title: "Paramètres",
+      url: "/parametres",
       icon: Settings2,
       items: [
         {
@@ -164,7 +124,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
