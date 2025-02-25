@@ -86,3 +86,5 @@ import {
     )
   }
   
+  export default Autre;
+  

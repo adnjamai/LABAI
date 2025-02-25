@@ -1,24 +1,77 @@
+version: '3.8'
+
+networks:
+  labai_network:
+    driver: bridge
+
 services:
   backend:
     build: ./src/backend
     ports:
       - "8000:8000"
+    volumes:
+      - ./src/backend:/app
+    networks:
+      - labai_network
     depends_on:
-      - yolo
-      - unet
-      - efficientnet
+      yolo:
+        condition: service_healthy
+      unet:
+        condition: service_healthy
+      efficientnet:
+        condition: service_healthy
+    environment:
+      - YOLO_SERVICE_URL=http://yolo:8001
+      - UNET_SERVICE_URL=http://unet:8002
+      - EFFICIENTNET_SERVICE_URL=http://efficientnet:8003
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   yolo:
     build: ./src/yolo
     ports:
       - "8001:8001"
+    volumes:
+      - ./src/yolo:/app
+    networks:
+      - labai_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   unet:
     build: ./src/unet
     ports:
       - "8002:8002"
+    volumes:
+      - ./src/unet:/app
+    networks:
+      - labai_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   efficientnet:
     build: ./src/efficientnet
     ports:
       - "8003:8003"
+    volumes:
+      - ./src/efficientnet:/app
+    networks:
+      - labai_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

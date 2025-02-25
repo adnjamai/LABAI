@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 import DOMProvider from "@/components/dom-provider";
 import {
@@ -29,7 +29,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
-import supabase from "utils/supabase";
+import supabase from "@/utils/supabase";
+import { useRouter } from "next/navigation";
 
 // Zod schema for form validation
 const medecinsSchema = z.object({
@@ -41,6 +42,10 @@ const medecinsSchema = z.object({
 });
 
 export function AddMedecin() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof medecinsSchema>>({
     resolver: zodResolver(medecinsSchema),
     defaultValues: {
@@ -53,6 +58,9 @@ export function AddMedecin() {
   });
 
   const onSubmit = async (values: z.infer<typeof medecinsSchema>) => {
+    setLoading(true);
+    setError(null);
+    
     try {
       const { data, error } = await supabase
         .from('medecins')
@@ -60,28 +68,26 @@ export function AddMedecin() {
           {
             nom: values.name,
             specialite: values.expertise,
-            email: values.email // Note: Need to add email field to form schema
+            email: values.email,
+            telephone: values.phone,
+            adresse: values.address
           }
         ])
-        .select()
+        .select();
 
       if (error) {
-        console.error('Error inserting medecin:', error)
-        // Add error handling/notification here
-        return
+        throw error;
       }
 
-      console.log('Successfully added medecin:', data)
-      // Add success notification here
-      // Redirect to medecins list or show success message
-
-    } catch (error) {
-      console.error('Error:', error)
-      // Add error handling/notification here
+      // Redirection vers la liste des médecins
+      router.push('/medecins');
+      
+    } catch (err) {
+      console.error('Error:', err);
+      setError('Une erreur est survenue lors de l\'ajout du médecin');
+    } finally {
+      setLoading(false);
     }
-    // TODO: Implement submission logic (e.g., API call to save medecin)
-    console.log(values);
-    // You might want to add toast notifications or other feedback mechanisms
   };
 
   return (
@@ -110,6 +116,12 @@ export function AddMedecin() {
           <div className="px-4 py-4">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                {error && (
+                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <span className="block sm:inline">{error}</span>
+                  </div>
+                )}
+                
                 <FormField
                   control={form.control}
                   name="name"
@@ -180,7 +192,9 @@ export function AddMedecin() {
                   )}
                 />
                 
-                <Button type="submit" className="w-full">Ajouter Médecin</Button>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Ajout en cours..." : "Ajouter Médecin"}
+                </Button>
               </form>
             </Form>
           </div>
